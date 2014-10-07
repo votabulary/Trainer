@@ -10,7 +10,10 @@
 
     <properties>
         <dropwizard.version>0.7.0</dropwizard.version>
+        <dropwizard-jdbi.version>0.7.0</dropwizard-jdbi.version>
         <guice.version>3.0</guice.version>
+        <jooq.version>3.3.1</jooq.version>
+        <mysql-connector.version>5.1.26</mysql-connector.version>
     </properties>
 
     <dependencies>
@@ -20,9 +23,29 @@
             <version>${dropwizard.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-jdbi</artifactId>
+            <version>${dropwizard-jdbi.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>${guice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector.version}</version>
         </dependency>
     </dependencies>
 
