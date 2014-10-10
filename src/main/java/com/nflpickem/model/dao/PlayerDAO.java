@@ -1,45 +1,61 @@
 package com.nflpickem.model.dao;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+import com.nflpickem.database.transaction.Transactional;
 import com.nflpickem.model.Player;
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.SqlQuery;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.jooq.Record;
+import org.jooq.Result;
+import org.skife.jdbi.v2.TransactionIsolationLevel;
 
-import java.util.Collection;
+import java.util.List;
 
-public interface PlayerDAO {
+import static com.nflpickem.database.schema.Tables.PLAYER;
 
-    public static final String TABLE_NAME = "player";
+public class PlayerDAO extends AbstractDAO {
 
-    @SqlUpdate("CREATE TABLE `player` (\n" +
-            "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
-            "  `version` bigint(20) NOT NULL,\n" +
-            "  `account_expired` bit(1) NOT NULL,\n" +
-            "  `account_locked` bit(1) NOT NULL,\n" +
-            "  `address1` varchar(255) DEFAULT NULL,\n" +
-            "  `address2` varchar(255) DEFAULT NULL,\n" +
-            "  `city` varchar(255) DEFAULT NULL,\n" +
-            "  `default_pick` varchar(255) NOT NULL,\n" +
-            "  `email` varchar(255) NOT NULL,\n" +
-            "  `enabled` bit(1) NOT NULL,\n" +
-            "  `first_name` varchar(255) NOT NULL,\n" +
-            "  `last_name` varchar(255) NOT NULL,\n" +
-            "  `password` varchar(255) NOT NULL,\n" +
-            "  `password_expired` bit(1) NOT NULL,\n" +
-            "  `state` varchar(255) DEFAULT NULL,\n" +
-            "  `username` varchar(255) NOT NULL,\n" +
-            "  `zip` varchar(255) DEFAULT NULL,\n" +
-            "  `app_sessionid` varchar(255) DEFAULT NULL,\n" +
-            "  `device_id` varchar(255) DEFAULT NULL,\n" +
-            "  `registration_key` varchar(255) DEFAULT NULL,\n" +
-            "  PRIMARY KEY (`id`),\n" +
-            "  UNIQUE KEY `email` (`email`)\n" +
-            ") ENGINE=MyISAM AUTO_INCREMENT=179 DEFAULT CHARSET=utf8;\n")
-    void createPlayerTable();
+    @Transactional(TransactionIsolationLevel.REPEATABLE_READ)
+    public List<Player> getPlayers() {
+        Result<? extends Record> results = jooq().select(
+                PLAYER.ID,
+                PLAYER.FIRST_NAME,
+                PLAYER.LAST_NAME,
+                PLAYER.EMAIL,
+                PLAYER.USERNAME)
+                .from(PLAYER).fetch();
 
-    @SqlQuery("SELECT * FROM player;")
-    Collection<Player> getAll();
+        return Lists.transform(results, new PlayersFromRecord());
+    }
 
-    @SqlQuery("SELECT * FROM player WHERE id = :id")
-    Player getById(@Bind("id") long id);
+    @Transactional(TransactionIsolationLevel.REPEATABLE_READ)
+    public Optional<Player> getPlayerById(Long playerId) {
+        Result<? extends Record> results = jooq().select(
+                PLAYER.ID,
+                PLAYER.FIRST_NAME,
+                PLAYER.LAST_NAME,
+                PLAYER.EMAIL,
+                PLAYER.USERNAME)
+                .from(PLAYER)
+                .where(PLAYER.ID.eq(playerId))
+                .fetch();
+
+        List<Player> players = Lists.transform(results, new PlayersFromRecord());
+        return (players.size() == 0)
+                ? Optional.<Player>absent()
+                : Optional.of(players.get(0));
+    }
+
+    private static class PlayersFromRecord implements Function<Record, Player> {
+        @Override
+        public Player apply(Record record) {
+            return new Player()
+                    .withEmail(record.getValue(PLAYER.EMAIL))
+                    .withFirstName(record.getValue(PLAYER.FIRST_NAME))
+                    .withLastName(record.getValue(PLAYER.LAST_NAME))
+                    .withId(record.getValue(PLAYER.ID))
+                    .withUsername(record.getValue(PLAYER.USERNAME));
+        }
+    }
+
 }

@@ -11,7 +11,7 @@ public class Player {
         return id;
     }
 
-    public Player setId(Long id) {
+    public Player withId(Long id) {
         this.id = id;
         return this;
     }
@@ -20,7 +20,7 @@ public class Player {
         return firstName;
     }
 
-    public Player setFirstName(String firstName) {
+    public Player withFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -29,7 +29,7 @@ public class Player {
         return lastName;
     }
 
-    public Player setLastName(String lastName) {
+    public Player withLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -38,7 +38,7 @@ public class Player {
         return email;
     }
 
-    public Player setEmail(String email) {
+    public Player withEmail(String email) {
         this.email = email;
         return this;
     }
@@ -47,7 +47,7 @@ public class Player {
         return username;
     }
 
-    public Player setUsername(String username) {
+    public Player withUsername(String username) {
         this.username = username;
         return this;
     }

@@ -1,3 +1,7 @@
+server:
+  type: simple
+  applicationContextPath: /app  # Default value*
+
 database:
   driverClass: com.mysql.jdbc.Driver
   user: pickem_user
@@ -20,7 +24,7 @@ database:
   checkConnectionWhileIdle: false
 
   # how long a connection must be held before it can be validated
-  checkConnectionHealthWhenIdleFor: 10s
+  validationInterval: 10s
 
   # the maximum lifetime of an idle connection
-  closeConnectionIfIdleFor: 1 minute
+  minIdleTime: 1 minute

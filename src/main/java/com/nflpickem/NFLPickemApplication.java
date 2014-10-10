@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.nflpickem.view.resource.AdminPlayerResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -29,7 +30,7 @@ public class NFLPickemApplication extends Application<NFLPickemConfiguration> {
 
     @Override
     public void initialize(Bootstrap<NFLPickemConfiguration> bootstrap) {
-
+        bootstrap.addBundle(new AssetsBundle());
     }
 
     @Override

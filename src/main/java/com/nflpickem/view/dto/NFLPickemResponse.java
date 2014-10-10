@@ -6,11 +6,17 @@ import javax.ws.rs.core.Response;
 public class NFLPickemResponse {
     private String message;
 
+    public NFLPickemResponse() {}
+
+    public NFLPickemResponse(String message) {
+        this.message = message;
+    }
+
     public String getMessage() {
         return message;
     }
 
-    public NFLPickemResponse setMessage(String message) {
+    public NFLPickemResponse withMessage(String message) {
         this.message = message;
         return this;
     }
