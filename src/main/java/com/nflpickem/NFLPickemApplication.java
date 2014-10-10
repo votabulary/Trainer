@@ -30,7 +30,7 @@ public class NFLPickemApplication extends Application<NFLPickemConfiguration> {
 
     @Override
     public void initialize(Bootstrap<NFLPickemConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle());
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
     }
 
     @Override
@@ -38,6 +38,7 @@ public class NFLPickemApplication extends Application<NFLPickemConfiguration> {
         this.environment = environment;
         this.configuration = configuration;
         prepareInjector();
+        environment.jersey().setUrlPattern("/api/*");
         environment.jersey().register(injector.getInstance(AdminPlayerResource.class));
 
         configureSerialization();

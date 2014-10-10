@@ -1,6 +1,6 @@
 server:
   type: simple
-  applicationContextPath: /app  # Default value*
+  applicationContextPath: /  # Default value*
 
 database:
   driverClass: com.mysql.jdbc.Driver
