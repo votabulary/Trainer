@@ -30,7 +30,7 @@ public class VotabularyApplication extends Application<VotabularyConfiguration> 
 
     @Override
     public void initialize(Bootstrap<VotabularyConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
+        bootstrap.addBundle(new AssetsBundle("/web-app/", "/", "index.html", "html"));
     }
 
     @Override

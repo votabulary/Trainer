@@ -5,13 +5,12 @@ import com.google.inject.Inject;
 import com.votabulary.controller.MemberService;
 import com.votabulary.controller.exceptions.MemberNotFoundException;
 import com.votabulary.model.Member;
-import com.votabulary.view.dto.BaseResponse;
-import com.votabulary.view.dto.MemberResponse;
+import com.votabulary.view.request.MemberRequest;
+import com.votabulary.view.response.BaseResponse;
+import com.votabulary.view.response.MemberResponse;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -39,7 +38,13 @@ public class MemberResource {
     @Timed
     public Response getPlayers() {
         List<Member> members = memberService.getPlayers();
-//        return MembersResponse.fromModels(members).toJsonResponse(Response.Status.OK);
         return BaseResponse.toJsonResponse(members, Response.Status.OK);
+    }
+
+    @POST
+    @Timed
+    public Response addPlayer(@Valid MemberRequest request) {
+        // TODO Create new member
+        return new BaseResponse("Not yet supported!").toJsonResponse(Response.Status.FORBIDDEN);
     }
 }
