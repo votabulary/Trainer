@@ -4,9 +4,9 @@ server:
 
 database:
   driverClass: com.mysql.jdbc.Driver
-  user: pickem_user
+  user: vlary_user
   password: password
-  url: jdbc:mysql://localhost:3306/pickem
+  url: jdbc:mysql://localhost:3306/votabulary
 
   # the maximum amount of time to wait on an empty pool before throwing an exception
   maxWaitForConnection: 1s
