@@ -21,7 +21,15 @@ public class MemberService {
         return member.get();
     }
 
-    public List<Member> getPlayers() {
+    public List<Member> getMembers() {
         return memberDAO.getMembers();
+    }
+
+    public Member addMember(Member member) {
+        return memberDAO.addMember(member);
+    }
+
+    public Member updateMember(Member member) {
+        return memberDAO.updateMember(member);
     }
 }

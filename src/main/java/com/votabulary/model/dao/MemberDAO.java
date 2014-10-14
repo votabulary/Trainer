@@ -3,6 +3,7 @@ package com.votabulary.model.dao;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.votabulary.database.schema.tables.records.MemberRecord;
 import com.votabulary.database.transaction.Transactional;
 import com.votabulary.model.Member;
 import org.jooq.Record;
@@ -21,7 +22,12 @@ public class MemberDAO extends AbstractDAO {
                 MEMBER.ID,
                 MEMBER.FIRST_NAME,
                 MEMBER.LAST_NAME,
-                MEMBER.EMAIL)
+                MEMBER.EMAIL,
+                MEMBER.COUNTY,
+                MEMBER.STATE,
+                MEMBER.PRECINCT,
+                MEMBER.EMAIL_REMINDER,
+                MEMBER.SMS_REMINDER)
                 .from(MEMBER).fetch();
 
         return Lists.transform(results, new MembersFromRecord());
@@ -33,7 +39,12 @@ public class MemberDAO extends AbstractDAO {
                 MEMBER.ID,
                 MEMBER.FIRST_NAME,
                 MEMBER.LAST_NAME,
-                MEMBER.EMAIL)
+                MEMBER.EMAIL,
+                MEMBER.COUNTY,
+                MEMBER.STATE,
+                MEMBER.PRECINCT,
+                MEMBER.EMAIL_REMINDER,
+                MEMBER.SMS_REMINDER)
                 .from(MEMBER)
                 .where(MEMBER.ID.eq(memberId))
                 .fetch();
@@ -44,6 +55,37 @@ public class MemberDAO extends AbstractDAO {
                 : Optional.of(members.get(0));
     }
 
+    @Transactional(TransactionIsolationLevel.SERIALIZABLE)
+    public Member addMember(Member member) {
+        MemberRecord record = toRecord(member);
+        record.insert();
+
+        return Member.fromRecord(record);
+    }
+
+    @Transactional(TransactionIsolationLevel.SERIALIZABLE)
+    public Member updateMember(Member member) {
+        MemberRecord record = toRecord(member);
+        record.update();
+
+        return Member.fromRecord(record);
+    }
+
+    private MemberRecord toRecord(Member member) {
+        MemberRecord record = jooq().newRecord(MEMBER);
+        record.setEmail(member.getEmail());
+        record.setFirstName(member.getFirstName());
+        record.setLastName(member.getLastName());
+        record.setState(member.getState());
+        record.setCounty(member.getCounty());
+        record.setPrecinct(member.getPrecinct());
+        record.setEmailReminder(member.getEmailReminder());
+        record.setSmsReminder(member.getSmsReminder());
+        if (member.getId() != null)
+            record.setId(member.getId());
+        return record;
+    }
+
     private static class MembersFromRecord implements Function<Record, Member> {
         @Override
         public Member apply(Record record) {
@@ -51,7 +93,12 @@ public class MemberDAO extends AbstractDAO {
                     .withEmail(record.getValue(MEMBER.EMAIL))
                     .withFirstName(record.getValue(MEMBER.FIRST_NAME))
                     .withLastName(record.getValue(MEMBER.LAST_NAME))
-                    .withId(record.getValue(MEMBER.ID));
+                    .withId(record.getValue(MEMBER.ID))
+                    .withCounty(record.getValue(MEMBER.COUNTY))
+                    .withState(record.getValue(MEMBER.STATE))
+                    .withPrecinct(record.getValue(MEMBER.PRECINCT))
+                    .withEmailReminder(record.getValue(MEMBER.EMAIL_REMINDER))
+                    .withSmsReminder(record.getValue(MEMBER.SMS_REMINDER));
         }
     }
 
