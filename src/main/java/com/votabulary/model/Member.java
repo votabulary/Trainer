@@ -14,6 +14,7 @@ public class Member {
     private Integer precinct;
     private Boolean emailReminder;
     private Boolean smsReminder;
+    private String smsNumber;
 
     public static Member fromRequest(MemberPostRequest request) {
         Member member = new Member()
@@ -24,7 +25,8 @@ public class Member {
                 .withCounty(request.getCounty())
                 .withPrecinct(request.getPrecinct())
                 .withEmailReminder(request.getEmailReminder())
-                .withSmsReminder(request.getSmsReminder());
+                .withSmsReminder(request.getSmsReminder())
+                .withSmsNumber(request.getSmsNumber());
         if (request instanceof MemberPutRequest) {
             member.withId(((MemberPutRequest)request).getId());
         }
@@ -41,7 +43,8 @@ public class Member {
                 .withCounty(record.getCounty())
                 .withPrecinct(record.getPrecinct())
                 .withEmailReminder(record.getEmailReminder())
-                .withSmsReminder(record.getSmsReminder());
+                .withSmsReminder(record.getSmsReminder())
+                .withSmsNumber(record.getSmsNumber());
     }
 
     public Long getId() {
@@ -122,6 +125,15 @@ public class Member {
 
     public Member withSmsReminder(Boolean smsReminder) {
         this.smsReminder = smsReminder;
+        return this;
+    }
+
+    public String getSmsNumber() {
+        return smsNumber;
+    }
+
+    public Member withSmsNumber(String smsNumber) {
+        this.smsNumber = smsNumber;
         return this;
     }
 }

@@ -22,6 +22,7 @@ public class MemberPostRequest {
     protected Boolean emailReminder;
     @NotNull
     protected Boolean smsReminder;
+    protected String smsNumber;
 
     @JsonCreator
     public MemberPostRequest(
@@ -32,7 +33,8 @@ public class MemberPostRequest {
             @JsonProperty("county") String county,
             @JsonProperty("precinct") Integer precinct,
             @JsonProperty("emailReminder") Boolean emailReminder,
-            @JsonProperty("smsReminder") Boolean smsReminder
+            @JsonProperty("smsReminder") Boolean smsReminder,
+            @JsonProperty("smsNumber") String smsNumber
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,6 +44,7 @@ public class MemberPostRequest {
         this.precinct = precinct;
         this.emailReminder = emailReminder;
         this.smsReminder = smsReminder;
+        this.smsNumber = smsNumber;
     }
 
     public String getFirstName() {
@@ -74,5 +77,9 @@ public class MemberPostRequest {
 
     public Boolean getSmsReminder() {
         return smsReminder;
+    }
+
+    public String getSmsNumber() {
+        return smsNumber;
     }
 }

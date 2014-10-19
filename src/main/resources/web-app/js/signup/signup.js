@@ -16,7 +16,7 @@ var MemberAPI = {
         var strBody = JSON.stringify(body);
 		$.ajax({
 		  type: "POST",
-		  url: "/members",
+		  url: "/api/members",
 		  contentType: "application/json; charset=utf-8",
 		  data: strBody,
 		  success: function (data, textStatus, jqXhr) {

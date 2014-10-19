@@ -7,7 +7,6 @@ import com.votabulary.database.schema.tables.records.MemberRecord;
 import com.votabulary.database.transaction.Transactional;
 import com.votabulary.model.Member;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.skife.jdbi.v2.TransactionIsolationLevel;
 
 import java.util.List;
@@ -18,41 +17,22 @@ public class MemberDAO extends AbstractDAO {
 
     @Transactional(TransactionIsolationLevel.REPEATABLE_READ)
     public List<Member> getMembers() {
-        Result<? extends Record> results = jooq().select(
-                MEMBER.ID,
-                MEMBER.FIRST_NAME,
-                MEMBER.LAST_NAME,
-                MEMBER.EMAIL,
-                MEMBER.COUNTY,
-                MEMBER.STATE,
-                MEMBER.PRECINCT,
-                MEMBER.EMAIL_REMINDER,
-                MEMBER.SMS_REMINDER)
-                .from(MEMBER).fetch();
+        List<MemberRecord> records = jooq().selectFrom(MEMBER).fetch().into(MemberRecord.class);
 
-        return Lists.transform(results, new MembersFromRecord());
+        return Lists.transform(records, new MembersFromRecord());
     }
 
     @Transactional(TransactionIsolationLevel.REPEATABLE_READ)
     public Optional<Member> getMemberById(Long memberId) {
-        Result<? extends Record> results = jooq().select(
-                MEMBER.ID,
-                MEMBER.FIRST_NAME,
-                MEMBER.LAST_NAME,
-                MEMBER.EMAIL,
-                MEMBER.COUNTY,
-                MEMBER.STATE,
-                MEMBER.PRECINCT,
-                MEMBER.EMAIL_REMINDER,
-                MEMBER.SMS_REMINDER)
-                .from(MEMBER)
+        MemberRecord record = jooq()
+                .selectFrom(MEMBER)
                 .where(MEMBER.ID.eq(memberId))
-                .fetch();
+                .fetchOne()
+                .into(MemberRecord.class);
 
-        List<Member> members = Lists.transform(results, new MembersFromRecord());
-        return (members.size() == 0)
+        return (record == null)
                 ? Optional.<Member>absent()
-                : Optional.of(members.get(0));
+                : Optional.of(Member.fromRecord(record));
     }
 
     @Transactional(TransactionIsolationLevel.SERIALIZABLE)
@@ -81,6 +61,7 @@ public class MemberDAO extends AbstractDAO {
         record.setPrecinct(member.getPrecinct());
         record.setEmailReminder(member.getEmailReminder());
         record.setSmsReminder(member.getSmsReminder());
+        record.setSmsNumber(member.getSmsNumber());
         if (member.getId() != null)
             record.setId(member.getId());
         return record;
@@ -98,7 +79,8 @@ public class MemberDAO extends AbstractDAO {
                     .withState(record.getValue(MEMBER.STATE))
                     .withPrecinct(record.getValue(MEMBER.PRECINCT))
                     .withEmailReminder(record.getValue(MEMBER.EMAIL_REMINDER))
-                    .withSmsReminder(record.getValue(MEMBER.SMS_REMINDER));
+                    .withSmsReminder(record.getValue(MEMBER.SMS_REMINDER))
+                    .withSmsNumber(record.getValue(MEMBER.SMS_NUMBER));
         }
     }
 

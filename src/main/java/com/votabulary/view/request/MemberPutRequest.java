@@ -19,9 +19,10 @@ public class MemberPutRequest extends MemberPostRequest {
             @JsonProperty("precinct") Integer precinct,
             @JsonProperty("emailReminder") Boolean emailReminder,
             @JsonProperty("smsReminder") Boolean smsReminder,
+            @JsonProperty("smsNumber") String smsNumber,
             @JsonProperty("id") Long id
     ) {
-        super(firstName, lastName, email, state, county, precinct, emailReminder, smsReminder);
+        super(firstName, lastName, email, state, county, precinct, emailReminder, smsReminder, smsNumber);
         this.id = id;
     }
 
